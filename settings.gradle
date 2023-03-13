@@ -1,0 +1,5 @@
+rootProject.name = 'TodoApp'
+include 'model'
+include 'view'
+include 'controller'
+
