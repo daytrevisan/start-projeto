@@ -4,6 +4,7 @@ import src.model.Task;
 import util.ConnectionFactory;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskController {
 
@@ -35,8 +36,7 @@ public class TaskController {
             statement.execute();
 
         } catch (Exception ex) {
-            throw new RuntimeException("Erro ao salvar a tarefa "
-            + ex.getMessage(), ex);
+            throw new RuntimeException("Erro ao salvar a tarefa " + ex.getMessage(), ex);
 
         } finally {
             ConnectionFactory.closeConnection(connection, statement);
@@ -75,7 +75,7 @@ public class TaskController {
             statement.setBoolean(6, task.isCompleted());
             statement.setDate(7, new Date(task.getDeadline().getTime()));
             statement.setDate(8, new Date(task.getCreatedAt().getTime()));
-            statement.setDate(9, new Date(task.getUpdateAt().getTime()));
+            statement.setDate(9, new Date(task.getUpdatedAt().getTime()));
 
             // Executando a query
             statement.execute();
@@ -149,7 +149,7 @@ public class TaskController {
                 task.setIsCompleted(resultSet.getBoolean("completed"));
                 task.setDeadline(resultSet.getDate("deadline"));
                 task.setCreatedAt(resultSet.getDate("createdAt"));
-                task.setUpdateAt(resultSet.getDate("updatedAt"));
+                task.setUpdatedAt(resultSet.getDate("updatedAt"));
 
                 tasks.add(task);
             }
