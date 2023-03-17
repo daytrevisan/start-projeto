@@ -11,7 +11,7 @@ public class Task {
     private boolean isCompleted;
     private Date deadline;
     private Date createdAt;
-    private Date updateAt;
+    private Date updatedAt;
 
     public Task(int id, int idProject, String name, String description, String notes, boolean isCompleted, Date deadline, Date createdAt, Date updateAt) {
         this.id = id;
@@ -89,12 +89,12 @@ public class Task {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdateAt() {
-        return updateAt;
+    public Date getUpdatedAt() {
+        return getUpdatedAt();
     }
 
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
