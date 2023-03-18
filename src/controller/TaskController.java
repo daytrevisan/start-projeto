@@ -10,14 +10,16 @@ public class TaskController {
 
     public void save (Task task) {
 
-        String sql = "INSERT INTO tasks (idProject, "
+        String sql = "INSERT INTO tasks ("
+                + "idProject, "
                 + "name, "
                 + "description, "
                 + "completed,"
                 + "notes,"
                 + "deadline,"
                 + "createdAt,"
-                + "updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                + "updatedAt)"
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         Connection connection = null;
         PreparedStatement statement = null;
@@ -122,6 +124,8 @@ public class TaskController {
 
         Connection connection = null;
         PreparedStatement statement = null;
+
+        // Na query de select é necessário incluir resultSet também
         ResultSet resultSet = null;
 
         // Lista de tarefas que será devolvida quando a chamada  do método acontecer
