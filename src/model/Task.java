@@ -22,7 +22,7 @@ public class Task {
         this.isCompleted = isCompleted;
         this.deadline = deadline;
         this.createdAt = createdAt;
-        this.updateAt = updateAt;
+        this.updatedAt = updateAt;
     }
 
     public int getId() {
@@ -108,7 +108,7 @@ public class Task {
                 ", isCompleted=" + isCompleted +
                 ", deadline=" + deadline +
                 ", createdAt=" + createdAt +
-                ", updateAt=" + updateAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }
