@@ -12,25 +12,25 @@ public class ProjectController {
     public void save(Project project) {
 
         String sql = "INSERT INTO projects (name, "
-                + "description ,"
+                + "description, "
                 + "createdAt, "
-                + "updateAt, VALUES (?, ?, ?, ?)";
+                + "updateAt) "
+                + "VALUES (?, ?, ?, ?)";
 
         Connection connection = null;
         PreparedStatement statement = null;
 
         try {
-
             connection = ConnectionFactory.getConnection();
             statement = connection.prepareStatement(sql);
             statement.setString(1, project.getName());
             statement.setString(2, project.getDescription());
             statement.setDate(3, new Date(project.getCreatedAt().getTime()));
-            statement.setDate(4, new Date(project.getUpdatedAt(resultSet.getDate("updatedAt")).getTime()));
+            statement.setDate(4, new Date(project.getUpdatedAt().getTime()));
             statement.execute();
 
         } catch (Exception ex) {
-            throw new RuntimeException("Erro ao salvar o projeto " + ex.getMessage(), ex);
+            throw new RuntimeException("Erro ao salvar o projeto " + ex);
 
         } finally {
             ConnectionFactory.closeConnection(connection, statement);
@@ -51,21 +51,66 @@ public class ProjectController {
         PreparedStatement statement = null;
 
         try {
-
             connection = ConnectionFactory.getConnection();
             statement = connection.prepareStatement(sql);
-            statement.setString(1, project.getName());
-            statement.setString(2, project.getDescription());
-            statement.setDate(3, new Date(project.getCreatedAt().getTime()));
-            statement.setDate(4, new Date(project.getUpdatedAt().getTime()));
+
+            statement.setInt(1, project.getId());
+            statement.setString(2, project.getName());
+            statement.setString(3, project.getDescription());
+            statement.setDate(4, new Date(project.getCreatedAt().getTime()));
+            statement.setDate(5, new Date(project.getUpdatedAt().getTime()));
             statement.execute();
 
         } catch (Exception ex) {
-            throw new RuntimeException("Erro ao atualizar a tarefa " + ex.getMessage());
+            throw new RuntimeException("Erro ao atualizar o projeto", ex);
+
+        } finally {
+            ConnectionFactory.closeConnection(connection, statement);
         }
+
     }
 
-    public void removeById(int projectId) {
+    public List<Project> getAll () {
+
+        // Diferente das tasks, em projetos não se inclui filtro
+        String sql = "SELECT * FROM projects";
+
+        List<Project> projects = new ArrayList<>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = ConnectionFactory.getConnection();
+            statement = connection.prepareStatement(sql);
+
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+
+                Project project = new Project();
+
+                project.setId(resultSet.getInt("id"));
+                project.setName(resultSet.getString("name"));
+                project.setDescription(resultSet.getString("description"));
+                project.setCreatedAt(resultSet.getDate("createdAt"));
+                project.setUpdatedAt(resultSet.getDate("updatedAt"));
+
+                projects.add(project);
+            }
+
+        } catch (Exception ex) {
+            throw new RuntimeException("Erro ao criar o projeto", ex);
+
+        } finally {
+            ConnectionFactory.closeConnection(connection, statement, resultSet);
+        }
+
+        return projects;
+    }
+
+    public void removeById(int idProject) {
 
         String sql = "DELETE FROM projects WHERE id = ?";
 
@@ -76,53 +121,16 @@ public class ProjectController {
 
             connection = ConnectionFactory.getConnection();
             statement = connection.prepareStatement(sql);
-            statement.setInt(1, projectId);
+            statement.setInt(1, idProject);
             statement.execute();
 
-        } catch (Exception ex) {
-            throw new RuntimeException("Erro ao deletar a tarefa " + ex.getMessage());
+        } catch (SQLException ex) {
+            throw new RuntimeException("Erro ao deletar o projeto", ex);
 
         } finally {
             ConnectionFactory.closeConnection(connection, statement);
         }
 
-    }
-
-    public List<Project> getAll (int idProject) {
-
-        String sql = "SELECT * FROM projects WHERE idProject = ?";
-
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-
-        List<Project> projects = new ArrayList<Project>();
-
-        try {
-            connection = ConnectionFactory.getConnection();
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1, idProject);
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-
-                Project project = new Project();
-                project.setName(resultSet.getString("name"));
-                project.setDescription(resultSet.getString("description"));
-                project.setCreatedAt(resultSet.getDate("createdAt"));
-                project.getUpdatedAt(resultSet.getDate("updatedAt"));
-
-                projects.add(project);
-            }
-
-        } catch (Exception ex) {
-            throw new RuntimeException("Erro ao criar o projeto " + ex.getMessage(), ex);
-
-        } finally {
-            ConnectionFactory.closeConnection(connection, statement, resultSet);
-        }
-
-        return projects;
     }
 
 }
