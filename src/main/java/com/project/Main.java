@@ -1,4 +1,4 @@
-package org.example;
+package com.project;
 
 import java.sql.Connection;
 import java.sql.Date;
